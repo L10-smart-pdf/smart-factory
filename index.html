@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="vi">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Lilama 10 Smart Factory</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style id="pagesize">@page { size: 100mm 70mm; margin: 0; }</style>
+<style>
+:root{--navy:#0b1f45;--blue:#1d5fd1;--blue-t:#e7effc;--teal:#0f9b9b;--green:#1a9a5c;--green-t:#e5f5ec;--red:#d63c31;--red-t:#fdeceb;--amber:#e39b0b;--amber-t:#fff4dc;
+  --ink:#13213f;--muted:#5d6782;--line:#dfe5ef;--bg:#f2f5fa;--card:#fff}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+#bar{position:sticky;top:0;z-index:5;background:linear-gradient(110deg,#071634,#123a86 70%,#1d5fd1);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px}
+#bar .t{font-weight:800;font-size:15px;line-height:1.2;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar .t small{display:block;font-weight:500;font-size:12px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:10px;padding:7px 11px;font-size:14px;font-weight:600}
+main{max-width:760px;margin:0 auto;padding:14px 14px 90px}
+h2{font-size:20px;margin:6px 0 12px}
+h3{font-size:16px;margin:18px 0 8px}
+.card{background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:0 2px 10px rgba(11,31,69,.06);margin-bottom:12px}
+.muted{color:var(--muted)} .small{font-size:13px}
+.big{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:0;border-radius:16px;padding:18px;font-size:20px;font-weight:800;color:#fff;background:linear-gradient(110deg,var(--blue),var(--teal));box-shadow:0 6px 16px rgba(29,95,209,.3)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:13px 16px;font-weight:700;font-size:16px;background:var(--blue);color:#fff;min-height:50px}
+.btn.full{width:100%} .btn.g{background:var(--green)} .btn.r{background:var(--red)} .btn.a{background:var(--amber)} .btn.o{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.45}
+.row{display:flex;gap:10px} .row>*{flex:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:#fff;border:0;border-radius:16px;padding:14px;text-align:left;box-shadow:0 2px 10px rgba(11,31,69,.06);min-height:86px;display:flex;flex-direction:column;gap:6px}
+.tile b{font-size:16px} .tile span{font-size:13px;color:var(--muted)}
+.tile i{font-style:normal;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+label{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:10px 0 4px}
+input,select,textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:#fff;font-size:16px}
+textarea{min-height:110px}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--blue);border-color:var(--blue)}
+.chip{display:inline-block;border-radius:20px;padding:4px 10px;font-size:13px;font-weight:700;background:#eef2f8;color:var(--ink)}
+.chip.b{background:var(--blue-t);color:var(--blue)} .chip.g{background:var(--green-t);color:var(--green)} .chip.r{background:var(--red-t);color:var(--red)} .chip.a{background:var(--amber-t);color:#9a6400}
+.alert{border-radius:12px;padding:10px 12px;font-size:14px;margin:8px 0;line-height:1.4}
+.alert.r{background:var(--red-t);color:#8c231b;border-left:5px solid var(--red)} .alert.a{background:var(--amber-t);color:#6b4800;border-left:5px solid var(--amber)} .alert.b{background:var(--blue-t);color:#123a86;border-left:5px solid var(--blue)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14.5px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-weight:600;word-break:break-word}
+.status{border-radius:16px;padding:14px 16px;color:#fff;margin-bottom:12px}
+.status .uid{font-size:20px;font-weight:900;letter-spacing:.3px;word-break:break-all}
+.status .st{font-size:15px;margin-top:4px;opacity:.95}
+.actions{display:grid;gap:10px;margin:12px 0}
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;align-items:center;gap:10px;padding:11px 4px;border-top:1px solid var(--line)}
+.list li:first-child{border-top:0}
+.list .m{flex:1;min-width:0} .list .m b{display:block;font-size:14.5px;word-break:break-all} .list .m span{font-size:12.5px;color:var(--muted)}
+.tl{border-left:3px solid var(--line);margin-left:6px;padding-left:14px}
+.tl div{position:relative;padding:6px 0 10px;font-size:14px}
+.tl div:before{content:"";position:absolute;left:-21px;top:10px;width:11px;height:11px;border-radius:50%;background:var(--blue)}
+.tl small{color:var(--muted);display:block}
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+table.t th,table.t td{border-bottom:1px solid var(--line);padding:7px 5px;text-align:left;vertical-align:top}
+table.t th{color:var(--muted);font-size:12px;font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.kpi{border-radius:16px;padding:12px 14px;color:#fff}
+.kpi b{font-size:28px;display:block;font-weight:900} .kpi span{font-size:13px;font-weight:600;opacity:.95}
+.bar{height:12px;border-radius:6px;background:#e9eef6;overflow:hidden;display:flex}
+.bar i{display:block;height:100%}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:42px;height:42px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:20px;font-weight:800}
+.step b{min-width:34px;text-align:center;font-size:17px}
+#modal{display:none;position:fixed;inset:0;background:rgba(7,22,52,.6);z-index:20;align-items:flex-end;justify-content:center}
+#modal.on{display:flex}
+#modal .sheet{background:#fff;width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px 16px 24px}
+#qr-reader{width:100%;border-radius:12px;overflow:hidden;background:#000;min-height:240px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;border-radius:12px;font-weight:600;z-index:30;display:none;max-width:92vw;text-align:center}
+#toast.r{background:var(--red)}
+.spin{display:none;position:fixed;inset:0;z-index:40;background:rgba(255,255,255,.5);align-items:center;justify-content:center}
+.spin.on{display:flex} .spin div{width:44px;height:44px;border:5px solid var(--blue-t);border-top-color:var(--blue);border-radius:50%;animation:r 0.8s linear infinite}
+@keyframes r{to{transform:rotate(360deg)}}
+.demo{background:var(--amber-t);border:1.5px solid #f2cf7a;border-radius:12px;padding:10px 12px;font-size:13.5px;margin-bottom:12px;line-height:1.45}
+/* ---- tem ---- */
+#printArea{display:none}
+.preview{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:10px}
+.preview .tag{box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.tag{width:100mm;height:70mm;background:#fff;color:#000;position:relative;overflow:hidden;font-family:Arial,Helvetica,sans-serif;border:.3mm solid #000;display:flex;flex-direction:column;page-break-inside:avoid;break-inside:avoid}
+.tag .th{background:#000;color:#fff;padding:.8mm 2.2mm;display:flex;flex-direction:column;font-weight:700;line-height:1.2;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.tag .th span{white-space:nowrap;font-size:6.4pt}
+.tag .th b{font-size:8pt;letter-spacing:.2pt}
+.tag .tb{flex:1;display:flex;min-height:0}
+.tag table{border-collapse:collapse;flex:1;font-size:7.4pt;table-layout:fixed}
+.tag td{border-bottom:.2mm solid #999;padding:.45mm 1.6mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;height:4.8mm}
+.tag td.k{width:40%;color:#333;font-size:6.6pt}
+.tag td.v{font-weight:700}
+.tag .tq{width:31mm;border-left:.2mm solid #999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1mm;font-size:6pt}
+.tag .tq svg{width:28mm;height:28mm}
+.tag .tf{border-top:.3mm solid #000;padding:1mm 2mm;font-size:12.5pt;font-weight:900;letter-spacing:.2pt;display:flex;justify-content:space-between;align-items:center}
+.tag .tf small{font-size:6pt;font-weight:400}
+.tag .rp{position:absolute;right:2mm;top:10mm;border:.5mm solid #000;padding:.4mm 1.5mm;font-size:7pt;font-weight:900;transform:rotate(-8deg);background:#fff}
+.tag.a4{margin:0}
+.tag.sm{flex-direction:row;align-items:center;gap:1.5mm;padding:1.5mm;border:.2mm solid #000}
+.tag.sm .sq{flex:0 0 auto;display:flex}
+.tag.sm .sq svg{width:100%;height:100%}
+.tag.sm .sx{flex:1;min-width:0;display:flex;flex-direction:column;gap:.6mm;overflow:hidden}
+.tag.sm .sx b{font-size:9pt;line-height:1.15;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.tag.sm .sx span{font-size:6.5pt;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#333}
+.tag.sm .sx i{font-style:normal;font-size:7pt;font-weight:700}
+.sheetA4N{display:grid;grid-template-columns:repeat(3,63.5mm);grid-auto-rows:38.1mm;column-gap:2.54mm;justify-content:center}
+.sheetA4N .tag.sm{border:.2mm dashed #bbb}
+.qimgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.qimgs figure{margin:0;text-align:center;font-size:13px}
+.qimgs img{width:100%;max-width:200px;image-rendering:pixelated;border:1px solid var(--line);border-radius:8px}
+.sheetA4{display:grid;grid-template-columns:100mm 100mm;grid-auto-rows:70mm;gap:0;justify-content:center;padding-top:6mm}
+@media print{
+  body{background:#fff}
+  #app,#modal,#toast,.spin{display:none!important}
+  #printArea{display:block}
+  .tag{border:.3mm solid #000;box-shadow:none}
+  .single .tag{page-break-after:always;break-after:page;border:0}
+  .sheetA4N .tag.sm{border:0}
+  .report{font-size:10.5pt;color:#000}
+  .report .card{box-shadow:none;border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="bar"><div class="t">Lilama 10 Smart Factory<small id="who">Chưa đăng nhập</small></div><button id="homeBtn" style="display:none" onclick="go('home')">Trang chính</button></div>
+  <main id="view"></main>
+</div>
+<div id="printArea"></div>
+<div id="modal"><div class="sheet" id="sheet"></div></div>
+<div id="toast"></div>
+<div class="spin" id="spin"><div></div></div>
+
+<script>
+var START_CODE = (new URLSearchParams(location.search).get('u') || '').replace(/[^A-Za-z0-9\-._]/g, '');
+var WEBAPP_URL = location.origin + location.pathname;
+var IS_DEMO = false;
+var API_URL = "https://script.google.com/macros/s/AKfycbyCahJ-aGenPmVtCESsor9-FCmyNmrdbh3m6mVjT3cnwZA_yZfUE0-Y9kN8xmUsLsSVQA/exec"; // bản đặt ngoài Google: đường dẫn /exec của Apps Script
+
+
+/* ================= hạ tầng ================= */
+var S = { cred: null, me: null, cfg: {}, stages: [], states: {}, roles: {}, acts: {}, projects: [], maDA: '' };
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function store(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem('l10hd_' + k) || 'null'); if (v === null) localStorage.removeItem('l10hd_' + k); else localStorage.setItem('l10hd_' + k, JSON.stringify(v)); } catch (e) { return null; } }
+function busy(on) { $('spin').className = on ? 'spin on' : 'spin'; }
+function toast(msg, bad) { var t = $('toast'); t.textContent = msg; t.className = bad ? 'r' : ''; t.style.display = 'block'; clearTimeout(toast._t); toast._t = setTimeout(function () { t.style.display = 'none'; }, bad ? 5000 : 2600); }
+function call(method, args, silent) {
+  if (!silent) busy(true);
+  return new Promise(function (res, rej) {
+    function done(r) { busy(false); if (r && r.ok) res(r.data); else { var e = new Error(r ? r.err : 'Không có phản hồi'); rej(e); } }
+    try {
+      if (window.google && google.script && google.script.run) {
+        google.script.run.withSuccessHandler(done).withFailureHandler(function (e) { busy(false); rej(new Error('Mất kết nối hoặc lỗi máy chủ: ' + (e && e.message || e))); }).api(method, args || {}, S.cred);
+      } else if (API_URL) {
+        fetch(API_URL, { method: 'POST', body: JSON.stringify({ method: method, args: args || {}, cred: S.cred }) })
+          .then(function (r) { return r.json(); }).then(done)
+          .catch(function (e) { busy(false); rej(new Error('Mất kết nối hoặc lỗi máy chủ: ' + (e && e.message || e))); });
+      } else { setTimeout(function () { done(DEMO.api(method, args || {}, S.cred)); }, 120); }
+    } catch (e) { busy(false); rej(e); }
+  });
+}
+function fail(e) { toast(e.message || String(e), true); }
+function stageName(m) { for (var i = 0; i < S.stages.length; i++) if (S.stages[i].ma === m) return S.stages[i].ten; return m || ''; }
+function stageEN(m) { for (var i = 0; i < S.stages.length; i++) if (S.stages[i].ma === m) return S.stages[i].en; return ''; }
+function isRole(r) { return S.me && r.indexOf(S.me.VaiTro) >= 0; }
+function canStage(st) { return S.me && (S.me.VaiTro === 'QUAN_LY' || S.me.CongDoan === 'TAT_CA' || S.me.CongDoan === st); }
+function qrUrl(code) { var b = S.webAppUrl || WEBAPP_URL || ''; return b ? b + (b.indexOf('?') >= 0 ? '&' : '?') + 'u=' + encodeURIComponent(code) : code; }
+function qrSvg(text) {
+  if (!window.qrcode) return '<div style="width:28mm;height:28mm;border:1px dashed #999;display:flex;align-items:center;justify-content:center;font-size:6pt">QR</div>';
+  var q = qrcode(0, 'M'); q.addData(text); q.make();
+  return q.createSvgTag({ cellSize: 2, margin: 0, scalable: true });
+}
+function stColor(it) {
+  return { CHO_CAT: '#6b778f', CHO_NHAN: '#e39b0b', DANG_LAM: '#1d5fd1', KHOA_NCR: '#d63c31', DA_TO_HOP: '#0f9b9b', DA_XUAT: '#1a9a5c' }[it.TrangThai] || '#6b778f';
+}
+function stText(it) {
+  var s = S.states[it.TrangThai] || it.TrangThai;
+  if (it.TrangThai === 'CHO_NHAN') return 'Đã giao, chờ ' + stageName(it.CongDoan) + ' nhận';
+  if (it.TrangThai === 'DANG_LAM') return 'Đang ở ' + stageName(it.CongDoan) + (it.ToNhan ? ' · ' + it.ToNhan : '');
+  return s;
+}
+function projectSelect(id, withAll) {
+  var h = '<select id="' + id + '">' + (withAll ? '<option value="">Tất cả dự án</option>' : '');
+  S.projects.forEach(function (p) { h += '<option value="' + esc(p.MaDA) + '"' + (p.MaDA === S.maDA ? ' selected' : '') + '>' + esc(p.MaDA + ' – ' + p.TenDA) + '</option>'; });
+  return h + '</select>';
+}
+function V(html) { $('view').innerHTML = html; window.scrollTo(0, 0); }
+function openModal(html) { $('sheet').innerHTML = html; $('modal').className = 'on'; }
+function closeModal() { stopScan(); $('modal').className = ''; $('sheet').innerHTML = ''; }
+function readPhoto(input) {
+  return new Promise(function (res) {
+    var f = input && input.files && input.files[0]; if (!f) return res('');
+    var img = new Image(), url = URL.createObjectURL(f);
+    img.onload = function () {
+      var k = Math.min(1, 1280 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+      res(c.toDataURL('image/jpeg', 0.72));
+    };
+    img.onerror = function () { res(''); }; img.src = url;
+  });
+}
+
+/* ================= đăng nhập ================= */
+function viewLogin(msg) {
+  $('homeBtn').style.display = 'none'; $('who').textContent = 'Chưa đăng nhập';
+  V('<div class="card" style="margin-top:10px"><h2>Đăng nhập</h2>' + (IS_DEMO ? DEMO.loginHint() : '') +
+    (msg ? '<div class="alert r">' + esc(msg) + '</div>' : '') +
+    '<label>Mã nhân viên</label><input id="lgU" autocomplete="username" autocapitalize="characters" placeholder="VD: CAT01">' +
+    '<label>Mã PIN</label><input id="lgP" type="password" inputmode="numeric" autocomplete="current-password" placeholder="••••">' +
+    '<div style="margin-top:14px"><button class="btn full" onclick="doLogin()">Đăng nhập</button></div>' +
+    '<p class="small muted">Mã nhân viên và PIN do Quản lý nhà máy cấp. Máy cá nhân sẽ nhớ đăng nhập cho lần sau.</p></div>');
+  $('lgP').addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
+}
+function doLogin(u, p) {
+  S.cred = { maNV: (u || $('lgU').value).trim(), pin: (p || $('lgP').value).trim() };
+  call('login', {}).then(function (d) {
+    S.me = d.user; S.cfg = d.config; S.stages = d.stages; S.states = d.states; S.roles = d.roles; S.acts = d.acts; S.projects = d.projects; S.webAppUrl = API_URL ? WEBAPP_URL : d.webAppUrl; S.version = d.version; S.qrTypes = d.qrTypes || {};
+    if (!S.maDA && S.projects.length) S.maDA = store('maDA') || S.projects[S.projects.length - 1].MaDA;
+    store('cred', S.cred);
+    $('who').textContent = S.me.HoTen + ' · ' + (S.roles[S.me.VaiTro] || S.me.VaiTro) + ' · ' + (S.me.CongDoan === 'TAT_CA' ? 'Tất cả công đoạn' : stageName(S.me.CongDoan));
+    $('homeBtn').style.display = '';
+    if (START_CODE) { var c = START_CODE; START_CODE = ''; openItem(c); } else go('home');
+  }).catch(function (e) { store('cred', null); S.cred = null; viewLogin(e.message); });
+}
+function logout() { store('cred', null); S.cred = null; S.me = null; viewLogin(); }
+
+/* ================= điều hướng ================= */
+function go(v, p) {
+  closeModal();
+  ({ home: viewHome, nhapKho: viewNhapKho, cat: viewCat, toHop: viewToHop, inTem: viewInTem, dash: viewDash, trace: viewTrace, bom: viewBOM, qr: viewQR })[v](p);
+}
+
+function viewHome() {
+  var tiles = [];
+  tiles.push(['dash', 'Tổng quan', 'Tiến độ, treo, NCR', '#1d5fd1', '▦']);
+  tiles.push(['trace', 'Truy xuất', 'Nguồn gốc cấu kiện', '#0f9b9b', '⌕']);
+  if (isRole(['KHO', 'QUAN_LY'])) tiles.push(['nhapKho', 'Nhập kho', 'Tem tấm, lô vật tư', '#6b778f', '⬇']);
+  if (canStage('CAT')) tiles.push(['cat', 'Pha cắt', 'Gán heat, in tem', '#e39b0b', '✂']);
+  if (canStage('TO_HOP')) tiles.push(['toHop', 'Tổ hợp', 'Kiểm đủ bộ', '#1a9a5c', '▣']);
+  if (isRole(['QUAN_LY', 'KHO'])) tiles.push(['inTem', 'In tem', 'In theo danh sách', '#123a86', '⎙']);
+  tiles.push(['qr', 'Tạo mã QR', 'Vị trí, thiết bị, bản vẽ…', '#0b1f45', '▦']);
+  if (isRole(['QUAN_LY'])) tiles.push(['bom', 'Nạp BOM', 'Dán từ Excel', '#7a3fc4', '⇪']);
+  var h = (IS_DEMO ? DEMO.banner() : '') +
+    '<button class="big" onclick="scan(openItem)">▣&nbsp; QUÉT QR</button>' +
+    '<div class="row" style="margin-top:10px"><input id="manual" placeholder="Hoặc nhập mã in dưới QR" autocapitalize="characters"><button class="btn o" style="flex:0 0 auto" onclick="openItem($(\'manual\').value)">Mở</button></div>' +
+    '<div class="grid2" style="margin-top:14px">' + tiles.map(function (t) {
+      return '<button class="tile" onclick="go(\'' + t[0] + '\')"><i style="background:' + t[3] + '">' + t[4] + '</i><b>' + t[1] + '</b><span>' + t[2] + '</span></button>';
+    }).join('') + '</div>' +
+    '<h3>Việc đang chờ ' + (S.me.CongDoan === 'TAT_CA' ? 'tất cả công đoạn' : stageName(S.me.CongDoan)) + '</h3><div class="card" id="mine"><span class="muted small">Đang tải…</span></div>' +
+    '<p style="text-align:center"><button class="btn o" onclick="logout()">Đăng xuất</button></p>' +
+    '<p class="small muted" style="text-align:center">Phiên bản ' + esc(S.version || '1.0') + '</p>';
+  V(h);
+  $('manual').addEventListener('keydown', function (e) { if (e.key === 'Enter') openItem(this.value); });
+  call('list', { viecCuaToi: true }, true).then(function (rows) {
+    if (!$('mine')) return;
+    if (!rows.length) { $('mine').innerHTML = '<span class="muted small">Không có việc đang chờ.</span>'; return; }
+    $('mine').innerHTML = '<ul class="list">' + rows.map(function (x) {
+      return '<li onclick="openItem(\'' + esc(x.UID) + '\')"><div class="m"><b>' + esc(x.UID) + '</b><span>' + esc((x.Loai === 'CK' ? 'Cấu kiện ' : 'Chi tiết ') + (x.CauKien || '') + ' · ' + stText(x) + ' · ' + x.CapNhat.slice(5, 16)) + '</span></div><span class="chip ' + (x.TrangThai === 'CHO_NHAN' ? 'a' : x.TrangThai === 'KHOA_NCR' ? 'r' : 'b') + '">' + (x.TrangThai === 'CHO_NHAN' ? 'Chờ nhận' : x.TrangThai === 'KHOA_NCR' ? 'NCR' : 'Đang làm') + '</span></li>';
+    }).join('') + '</ul>';
+  }).catch(function (e) { if ($('mine')) $('mine').innerHTML = '<span class="small" style="color:var(--red)">' + esc(e.message) + '</span>'; });
+}
+
+/* ================= quét QR ================= */
+var scanner = null;
+function stopScan() { if (scanner) { try { scanner.stop().catch(function () { }); } catch (e) { } scanner = null; } }
+function isIOS() { return /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+/** Thu nhỏ ảnh chụp (ảnh iPhone 12 MP quá lớn để đọc QR) */
+function shrinkImage(file, max, done) {
+  try {
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function () {
+      var k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url);
+      c.toBlob(function (bl) { done(bl ? new File([bl], 'tem.jpg', { type: 'image/jpeg' }) : file); }, 'image/jpeg', 0.9);
+    };
+    img.onerror = function () { done(file); };
+    img.src = url;
+  } catch (e) { done(file); }
+}
+function scan(cb, title) {
+  var ios = !API_URL; // trong khung Google Apps Script camera trực tiếp bị chặn -> chỉ chụp ảnh; bản đặt ngoài Google quét trực tiếp
+  openModal('<div class="row" style="align-items:center"><h2 style="margin:0">' + esc(title || 'Quét tem QR') + '</h2><button class="btn o" style="flex:0 0 auto" onclick="closeModal()">Đóng</button></div>' +
+    '<label class="big" style="display:flex;margin-top:12px;cursor:pointer" for="qrFile">📷&nbsp; CHỤP ẢNH TEM ĐỂ QUÉT</label>' +
+    '<input type="file" accept="image/*" capture="environment" id="qrFile" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">' +
+    '<div id="scanMsg" class="small muted" style="margin:8px 0">' + (ios ? 'Bấm nút trên, chụp rõ tem QR (tem chiếm phần lớn khung) rồi xác nhận ảnh. Cách nhanh hơn: mở Camera của điện thoại hoặc Zalo, hướng vào tem – máy tự mở đúng mã.' : 'Đang mở camera… Nếu không thấy hình, bấm nút chụp ảnh tem.') + '</div>' +
+    '<div id="qr-reader" style="margin-top:6px' + (ios ? ';display:none' : '') + '"></div>' +
+    '<label>Hoặc nhập mã in dưới QR</label><div class="row"><input id="qrManual" autocapitalize="characters" placeholder="VD: L10HD-DA01-P01-001"><button class="btn" style="flex:0 0 auto" id="qrOk">OK</button></div>');
+  var fired = false;
+  function hit(text) { if (fired) return; fired = true; stopScan(); if (navigator.vibrate) navigator.vibrate(80); closeModal(); cb(text); }
+  $('qrOk').onclick = function () { if ($('qrManual').value.trim()) hit($('qrManual').value.trim()); };
+  $('qrManual').addEventListener('keydown', function (e) { if (e.key === 'Enter' && this.value.trim()) hit(this.value.trim()); });
+  $('qrFile').onchange = function () {
+    var f = this.files[0]; this.value = ''; if (!f) return;
+    if (!window.Html5Qrcode) { $('scanMsg').textContent = 'Không tải được bộ đọc QR (kiểm tra mạng). Nhập tay mã in dưới QR.'; return; }
+    stopScan(); $('scanMsg').textContent = 'Đang đọc mã trong ảnh…';
+    shrinkImage(f, 1400, function (img) {
+      var tmp = new Html5Qrcode('qr-reader');
+      tmp.scanFile(img, false).then(hit).catch(function () {
+        tmp.scanFile(f, false).then(hit).catch(function () { if ($('scanMsg')) $('scanMsg').textContent = 'Không đọc được QR trong ảnh. Chụp gần hơn (tem chiếm phần lớn khung), đủ sáng, không rung – hoặc nhập tay mã.'; });
+      });
+    });
+  };
+  if (ios) return; // iPhone: camera trực tiếp bị chặn trong ứng dụng Google Apps Script, dùng chụp ảnh
+  if (!window.Html5Qrcode) { $('scanMsg').textContent = 'Không tải được bộ quét. Dùng nút chụp ảnh tem hoặc nhập tay.'; return; }
+  try {
+    scanner = new Html5Qrcode('qr-reader');
+    scanner.start({ facingMode: 'environment' }, { fps: 10, qrbox: function (w, h) { var s = Math.floor(Math.min(w, h) * 0.75); return { width: s, height: s }; } }, hit, function () { })
+      .catch(function () { if ($('qr-reader')) $('qr-reader').style.display = 'none'; if ($('scanMsg')) $('scanMsg').textContent = 'Camera trực tiếp bị trình duyệt chặn. Bấm nút CHỤP ẢNH TEM ĐỂ QUÉT ở trên, hoặc nhập tay mã.'; scanner = null; });
+  } catch (e) { $('qr-reader').style.display = 'none'; $('scanMsg').textContent = 'Không mở được camera. Bấm nút chụp ảnh tem hoặc nhập tay.'; }
+}
+
+/* ================= xem một mã ================= */
+function openItem(code) {
+  code = String(code || '').trim(); if (!code) return;
+  call('get', { code: code }).then(function (g) { g.kind === 'VT' ? viewPlate(g) : g.kind === 'QR' ? viewQRRecord(g) : viewItem(g); }).catch(fail);
+}
+function viewPlate(g) {
+  var p = g.plate;
+  V('<div class="status" style="background:' + (p.TrangThai === 'TRONG_KHO' ? '#1d5fd1' : '#6b778f') + '"><div class="small">' + (p.Loai === 'THEP_DU' ? 'THÉP DƯ' : 'VẬT TƯ') + '</div><div class="uid">' + esc(p.MaVT) + '</div><div class="st">' + (p.TrangThai === 'TRONG_KHO' ? 'Trong kho' : 'Đã cắt') + '</div></div>' +
+    '<div class="card"><dl class="kv"><dt>Mác thép</dt><dd>' + esc(p.MacThep) + '</dd><dt>Quy cách</dt><dd>' + esc(p.QuyCach) + '</dd><dt>Số lò (heat)</dt><dd>' + esc(p.HeatNo) + '</dd><dt>CO/CQ</dt><dd>' + esc(p.SoCOCQ || '…') + '</dd><dt>Vị trí</dt><dd>' + esc(p.ViTri) + '</dd><dt>Ngày nhập</dt><dd>' + esc(p.NgayNhap) + '</dd>' + (p.MaVTMe ? '<dt>Tấm mẹ</dt><dd>' + esc(p.MaVTMe) + '</dd>' : '') + '</dl></div>' +
+    '<div class="actions">' + (g.canCut ? '<button class="btn a full" onclick="catStep2(\'' + esc(p.MaVT) + '\')">✂ Cắt tấm này</button>' : '') +
+    '<button class="btn o full" onclick="previewTags([\'' + esc(p.MaVT) + '\'])">⎙ Xem / in tem vật tư</button></div>' +
+    (g.parts.length ? '<h3>Chi tiết cắt từ tấm này (' + g.parts.length + ')</h3><div class="card"><ul class="list">' + g.parts.map(function (x) { return '<li onclick="openItem(\'' + esc(x.UID) + '\')"><div class="m"><b>' + esc(x.UID) + '</b><span>' + esc(x.CauKien + ' · ' + x.KichThuoc) + '</span></div></li>'; }).join('') + '</ul></div>' : '') +
+    (g.remnants.length ? '<h3>Thép dư</h3><div class="card"><ul class="list">' + g.remnants.map(function (x) { return '<li onclick="openItem(\'' + esc(x.MaVT) + '\')"><div class="m"><b>' + esc(x.MaVT) + '</b><span>' + esc(x.QuyCach + ' · ' + x.ViTri) + '</span></div></li>'; }).join('') + '</ul></div>' : ''));
+}
+function viewItem(g) {
+  var it = g.item, isCK = it.Loai === 'CK';
+  var h = '<div class="status" style="background:' + stColor(it) + '"><div class="small">' + (isCK ? 'CẤU KIỆN' : 'CHI TIẾT') + ' · ' + esc(it.MaDA) + '</div><div class="uid">' + esc(it.UID) + '</div><div class="st">' + esc(stText(it)) + '</div></div>';
+  if (it.CanhBao) h += '<div class="alert a"><b>Cảnh báo:</b> ' + esc(it.CanhBao) + '</div>';
+  if (g.overdue) h += '<div class="alert r"><b>Treo quá hạn:</b> đã giao từ ' + esc(it.CapNhat) + ' nhưng ' + esc(stageName(it.CongDoan)) + ' chưa quét nhận.</div>';
+  g.ncr.filter(function (n) { return n.TrangThai === 'MO'; }).forEach(function (n) { h += '<div class="alert r"><b>' + esc(n.SoNCR) + ':</b> ' + esc(n.MoTa) + (n.Anh ? ' · <a href="' + esc(n.Anh) + '" target="_blank">ảnh</a>' : '') + '</div>'; });
+  if (it.Loai === 'CT' && it.TrangThai === 'DANG_LAM' && it.CongDoan === 'TO_HOP') h += '<div class="alert b">Chi tiết đã ở tổ gá, chờ tổ hợp vào cấu kiện <b>' + esc(it.CauKien) + '</b>.</div>';
+  h += '<div class="actions">' + g.actions.map(function (a) { return actBtn(a, it); }).join('') + '</div>';
+  h += '<div class="card"><dl class="kv">' +
+    '<dt>Cấu kiện</dt><dd>' + esc(it.CauKien) + (it.UIDCha ? ' · <a href="#" onclick="openItem(\'' + esc(it.UIDCha) + '\');return false">' + esc(it.UIDCha) + '</a>' : '') + '</dd>' +
+    '<dt>Bản vẽ</dt><dd>' + esc(it.BanVe) + ' · Rev ' + esc(it.Rev) + '</dd>' +
+    (isCK ? '' : '<dt>Chi tiết</dt><dd>' + esc(it.SoCT) + '</dd><dt>Kích thước</dt><dd>' + esc(it.KichThuoc) + '</dd>') +
+    '<dt>Mác thép</dt><dd>' + esc(it.MacThep) + '</dd>' +
+    (isCK ? '' : '<dt>Số lò (heat)</dt><dd>' + esc(it.HeatNo || 'chưa cắt') + (it.MaVT ? ' · <a href="#" onclick="openItem(\'' + esc(it.MaVT) + '\');return false">' + esc(it.MaVT) + '</a>' : '') + '</dd>') +
+    '<dt>Khối lượng</dt><dd>' + esc(it.KhoiLuong) + ' kg</dd>' +
+    '<dt>Chịu lực</dt><dd>' + (it.ChiuLuc === 'K' ? 'Không' : 'Có') + '</dd>' +
+    '<dt>Số lần in lại tem</dt><dd>' + esc(it.SoLanInLai || '0') + '</dd>' +
+    '<dt>Cập nhật</dt><dd>' + esc(it.CapNhat) + '</dd></dl></div>';
+  if (isCK && g.children.length) {
+    h += '<h3>Chi tiết trong cấu kiện (' + g.children.length + ')</h3><div class="card"><table class="t"><tr><th>Mã</th><th>Chi tiết</th><th>Số lò</th></tr>' +
+      g.children.map(function (c) { return '<tr onclick="openItem(\'' + esc(c.UID) + '\')"><td>' + esc(c.UID) + '</td><td>' + esc(c.SoCT) + '</td><td>' + esc(c.HeatNo) + '</td></tr>'; }).join('') + '</table></div>';
+  }
+  h += '<h3>Lịch sử</h3><div class="card"><div class="tl">' + g.logs.map(function (l) {
+    return '<div><b>' + esc(S.acts[l.HanhDong] || l.HanhDong) + '</b> · ' + esc(stageName(l.CongDoan)) + '<small>' + esc(l.ThoiGian) + ' · ' + esc(l.HoTen) + ' (' + esc(l.ToDoi) + ')</small>' +
+      (l.GhiChu ? '<small>' + esc(l.GhiChu) + '</small>' : '') + (l.Anh ? '<small><a href="' + esc(l.Anh) + '" target="_blank">Xem ảnh</a></small>' : '') + '</div>';
+  }).join('') + '</div></div>';
+  h += '<div class="row"><button class="btn o" onclick="go(\'trace\',\'' + esc(it.UID) + '\')">Báo cáo truy xuất</button><button class="btn o" onclick="scan(openItem)">Quét mã khác</button></div>';
+  V(h);
+}
+function actBtn(a, it) {
+  var nx = { TO_HOP: 'HAN', HAN: 'QC', SON: 'XUAT' }[it.CongDoan];
+  var m = {
+    NHAN: ['g', '✓ NHẬN (' + stageName(it.CongDoan) + ')'],
+    GIAO: ['', '➜ HOÀN THÀNH – GIAO ' + stageName(nx).toUpperCase()],
+    QC_DAT: ['g', '✓ QC ĐẠT – chuyển sơn'],
+    QC_KHONG_DAT: ['r', '✕ QC KHÔNG ĐẠT – lập NCR'],
+    DONG_NCR: ['a', 'Đóng NCR'],
+    XUAT: ['g', '🚚 XUẤT XƯỞNG'],
+    IN_LAI: ['o', '⎙ In lại tem'],
+    BAO_LOI: ['o', 'Báo lỗi / ghi chú']
+  }[a];
+  return '<button class="btn ' + m[0] + ' full" onclick="doAct(\'' + esc(it.UID) + '\',\'' + a + '\')">' + m[1] + '</button>';
+}
+function doAct(uid, a) {
+  function run(data) {
+    return call('act', { uid: uid, act: a, data: data || {} }).then(function (g) {
+      closeModal(); toast((S.acts[a] || a) + ': xong');
+      if (a === 'IN_LAI') previewTags([uid], true); else viewItem(g);
+    }).catch(fail);
+  }
+  if (a === 'NHAN' || a === 'GIAO') return run();
+  var f = {
+    QC_DAT: '<h2>QC đạt</h2><label>Số biên bản kiểm tra (nếu có)</label><input id="f1"><label>Ảnh (không bắt buộc)</label><input id="fp" type="file" accept="image/*" capture="environment">',
+    QC_KHONG_DAT: '<h2>QC không đạt – lập NCR</h2><label>Mô tả lỗi *</label><textarea id="f1" placeholder="Vị trí, loại lỗi, kích thước…"></textarea><label>Ảnh lỗi</label><input id="fp" type="file" accept="image/*" capture="environment">',
+    DONG_NCR: '<h2>Đóng NCR</h2><label>Hướng xử lý</label><select id="f1"><option value="SUA">Chuyển tổ hàn sửa (quay lại Hàn)</option><option value="CHAP_NHAN">Chấp nhận, chuyển sơn</option></select><label>Ghi chú</label><input id="f2">',
+    XUAT: '<h2>Xuất xưởng</h2><label>Số kiện</label><input id="f1"><label>Phương tiện (biển số xe, tàu)</label><input id="f2">',
+    IN_LAI: '<h2>In lại tem</h2><div class="alert a">Đối chiếu kích thước, hình dạng với bản vẽ và vị trí trong lô trước khi dán lại. Không chắc chắn chi tiết hoặc heat number thì lập NCR.</div><label>Lý do *</label><select id="f1"><option>Tem bị rách</option><option>Tem bị rơi, mất</option><option>Tem mờ, không quét được</option><option>Tem cháy do hàn, mài</option><option>Tem bị che sau tổ hợp</option><option>Khác</option></select><label>Ghi chú</label><input id="f2">',
+    BAO_LOI: '<h2>Báo lỗi / ghi chú</h2><label>Nội dung *</label><textarea id="f1"></textarea><label>Ảnh</label><input id="fp" type="file" accept="image/*" capture="environment">'
+  }[a];
+  openModal(f + '<div class="row" style="margin-top:16px"><button class="btn o" onclick="closeModal()">Hủy</button><button class="btn" id="fOk">Xác nhận</button></div>');
+  $('fOk').onclick = function () {
+    var v1 = $('f1') ? $('f1').value.trim() : '', v2 = $('f2') ? $('f2').value.trim() : '';
+    readPhoto($('fp')).then(function (img) {
+      var d = { QC_DAT: { soBienBan: v1, anh: img }, QC_KHONG_DAT: { moTa: v1, anh: img }, DONG_NCR: { huong: v1, ghiChu: v2 }, XUAT: { soKien: v1, phuongTien: v2 },
+        IN_LAI: { lyDo: v1 + (v2 ? ' – ' + v2 : '') }, BAO_LOI: { ghiChu: v1, anh: img } }[a];
+      run(d);
+    });
+  };
+}
+
+/* ================= nhập kho ================= */
+function viewNhapKho() {
+  V('<h2>Nhập kho vật tư</h2><div class="card">' +
+    '<label>Loại</label><select id="k0"><option value="TAM">Thép tấm</option><option value="HINH">Thép hình, ống</option><option value="LO">Lô vật tư tiêu hao (que hàn, bu lông, sơn)</option></select>' +
+    '<div class="row"><div><label>Mác thép / vật tư *</label><input id="k1" placeholder="SM490YB" autocapitalize="characters"></div><div><label>Dày (mm)</label><input id="k2" inputmode="decimal" placeholder="20"></div></div>' +
+    '<label>Quy cách</label><input id="k3" placeholder="20 × 2000 × 12000">' +
+    '<div class="row"><div><label>Số lò (heat number) *</label><input id="k4" autocapitalize="characters"></div><div><label>Số CO/CQ (MTR)</label><input id="k5"></div></div>' +
+    '<div class="row"><div><label>Vị trí bãi</label><input id="k6" placeholder="Bãi A-01"></div><div><label>Số lượng tấm/lô</label><input id="k7" inputmode="numeric" value="1"></div></div>' +
+    '<label>Dự án (nếu mua riêng)</label>' + projectSelect('k8', true) +
+    '<label>Ghi chú</label><input id="k9">' +
+    '<div style="margin-top:14px"><button class="btn full" onclick="doNhapKho()">Nhập kho & in tem</button></div></div>');
+}
+function doNhapKho() {
+  call('nhapKho', { loai: $('k0').value, macThep: $('k1').value, day: $('k2').value, quyCach: $('k3').value, heatNo: $('k4').value, soCOCQ: $('k5').value, viTri: $('k6').value, soLuong: $('k7').value, maDA: $('k8').value, ghiChu: $('k9').value })
+    .then(function (r) { toast('Đã nhập ' + r.length + ' mã vật tư'); previewTags(r.map(function (x) { return x.MaVT; })); }).catch(fail);
+}
+
+/* ================= pha cắt ================= */
+function viewCat() {
+  V('<h2>Pha cắt</h2><div class="card"><p class="small muted" style="margin-top:0">Bước 1: quét tem tấm thép sắp cắt (mã VT-…). Hệ thống liệt kê chi tiết chờ cắt cùng mác thép, chiều dày.</p>' +
+    '<button class="big" onclick="scan(catStep2,\'Quét tem tấm thép\')">▣&nbsp; QUÉT TEM TẤM</button>' +
+    '<div class="row" style="margin-top:10px"><input id="cm" placeholder="Hoặc nhập mã VT-…" autocapitalize="characters"><button class="btn o" style="flex:0 0 auto" onclick="catStep2($(\'cm\').value)">Tiếp</button></div></div>' +
+    '<h3>Tấm trong kho</h3><div class="card" id="plates"><span class="small muted">Đang tải…</span></div>');
+  call('list', { loai: 'VT', trangThai: 'TRONG_KHO' }, true).then(function (rows) {
+    if (!$('plates')) return;
+    $('plates').innerHTML = rows.length ? '<ul class="list">' + rows.slice(0, 40).map(function (p) {
+      return '<li onclick="catStep2(\'' + esc(p.MaVT) + '\')"><div class="m"><b>' + esc(p.MaVT) + (p.Loai === 'THEP_DU' ? ' · thép dư' : '') + '</b><span>' + esc(p.MacThep + ' · ' + p.QuyCach + ' · số lò ' + p.HeatNo + ' · ' + p.ViTri) + '</span></div><span class="chip">Chọn</span></li>';
+    }).join('') + '</ul>' : '<span class="small muted">Không có tấm nào trong kho.</span>';
+  }).catch(fail);
+}
+var CUT = null;
+function catStep2(code) {
+  call('catInfo', { maVT: code }).then(function (r) {
+    CUT = { plate: r.plate, groups: r.groups.map(function (g) { g.n = 0; return g; }) };
+    renderCut();
+  }).catch(fail);
+}
+function renderCut() {
+  var p = CUT.plate;
+  var h = '<h2>Cắt tấm ' + esc(p.MaVT) + '</h2><div class="card"><dl class="kv"><dt>Mác thép</dt><dd>' + esc(p.MacThep) + '</dd><dt>Quy cách</dt><dd>' + esc(p.QuyCach) + '</dd><dt>Số lò (heat)</dt><dd>' + esc(p.HeatNo) + '</dd></dl></div>';
+  if (!CUT.groups.length) h += '<div class="alert a">Không có chi tiết nào chờ cắt cùng mác thép ' + esc(p.MacThep) + (p.Day ? ', dày ' + esc(p.Day) + ' mm' : '') + '.</div>';
+  else h += '<h3>Bước 2: chọn số chi tiết đã cắt từ tấm này</h3><div class="card"><ul class="list">' + CUT.groups.map(function (g, i) {
+    return '<li><div class="m"><b>' + esc(g.SoCT) + ' · ' + esc(g.CauKien) + '</b><span>' + esc(g.KichThuoc + ' · ' + g.MaDA + ' · ' + g.BanVe + ' Rev ' + g.Rev + ' · chờ cắt ' + g.uids.length) + '</span></div>' +
+      '<div class="step"><button onclick="cutN(' + i + ',-1)">−</button><b id="cn' + i + '">' + g.n + '</b><button onclick="cutN(' + i + ',1)">+</button></div></li>';
+  }).join('') + '</ul></div>' +
+    '<h3>Thép dư (nếu có)</h3><div class="card"><div class="row"><div><label>Quy cách thép dư</label><input id="du1" placeholder="20 × 800 × 3000"></div><div><label>Vị trí</label><input id="du2" placeholder="Bãi thép dư"></div></div><p class="small muted">Để trống nếu không còn thép dư. Tem thép dư kế thừa heat number ' + esc(p.HeatNo) + '.</p></div>' +
+    '<button class="btn a full" onclick="doCut()">Xác nhận đã cắt – giao tổ gá – in tem</button>';
+  V(h);
+}
+function cutN(i, d) { var g = CUT.groups[i]; g.n = Math.max(0, Math.min(g.uids.length, g.n + d)); $('cn' + i).textContent = g.n; }
+function doCut() {
+  var uids = []; CUT.groups.forEach(function (g) { uids = uids.concat(g.uids.slice(0, g.n)); });
+  if (!uids.length) return toast('Chưa chọn chi tiết nào', true);
+  call('cat', { maVT: CUT.plate.MaVT, uids: uids, thepDu: { quyCach: $('du1').value, viTri: $('du2').value } }).then(function (r) {
+    toast('Đã cắt ' + r.uids.length + ' chi tiết, giao tổ gá');
+    previewTags(r.uids.concat(r.thepDu ? [r.thepDu.MaVT] : []));
+  }).catch(fail);
+}
+
+/* ================= tổ hợp ================= */
+function viewToHop() {
+  V('<h2>Tổ hợp cấu kiện</h2><label>Dự án</label>' + projectSelect('thDA') + '<div id="ckList" style="margin-top:12px"></div>');
+  $('thDA').onchange = function () { S.maDA = this.value; store('maDA', S.maDA); loadCK(); };
+  loadCK();
+}
+function loadCK() {
+  if (!$('thDA').value) { $('ckList').innerHTML = '<div class="alert b">Chưa có dự án. Quản lý cần nạp BOM trước.</div>'; return; }
+  call('listCauKien', { maDA: $('thDA').value }).then(function (rows) {
+    $('ckList').innerHTML = '<div class="card"><ul class="list">' + rows.map(function (c) {
+      return '<li onclick="ckDetail(\'' + esc(c.CauKien) + '\')"><div class="m"><b>' + esc(c.CauKien) + '</b><span>' + esc(c.BanVe + ' Rev ' + c.Rev + ' · đã tổ hợp ' + c.daToHop + '/' + c.SL) + '</span></div>' +
+        (c.conLai <= 0 ? '<span class="chip g">Xong</span>' : c.du ? '<span class="chip g">Đủ bộ</span>' : '<span class="chip a">Thiếu</span>') + '</li>';
+    }).join('') + '</ul></div>';
+  }).catch(fail);
+}
+function ckDetail(ck) {
+  call('toHopInfo', { maDA: $('thDA') ? $('thDA').value : S.maDA, cauKien: ck }).then(function (r) {
+    var h = '<h2>Cấu kiện ' + esc(r.CauKien) + '</h2><div class="card"><dl class="kv"><dt>Dự án</dt><dd>' + esc(r.MaDA) + '</dd><dt>Bản vẽ</dt><dd>' + esc(r.BanVe + ' Rev ' + r.Rev) + '</dd><dt>Đã tổ hợp</dt><dd>' + r.daToHop + ' / ' + r.SL + '</dd></dl></div>' +
+      '<h3>Kiểm đủ bộ cho cấu kiện thứ ' + (r.daToHop + 1) + '</h3><div class="card"><table class="t"><tr><th>Chi tiết</th><th>Cần</th><th>Đã nhận</th><th>Chờ nhận</th><th>Chờ cắt</th></tr>' +
+      r.lines.map(function (l) { return '<tr><td><b>' + esc(l.SoCT) + '</b><br><span class="small muted">' + esc(l.KichThuoc) + '</span></td><td>' + l.can + '</td><td style="color:' + (l.thieu ? 'var(--red)' : 'var(--green)') + ';font-weight:800">' + l.sanSang + '</td><td>' + l.choNhan + '</td><td>' + l.choCat + '</td></tr>'; }).join('') + '</table></div>' +
+      (r.du ? '<button class="btn g full" onclick="doToHop(\'' + esc(r.MaDA) + '\',\'' + esc(r.CauKien) + '\')">✓ Tổ hợp xong – tạo & in tem cấu kiện</button>'
+        : '<div class="alert a">' + (r.daToHop >= r.SL ? 'Đã tổ hợp đủ số lượng cấu kiện này.' : 'Chưa đủ bộ. Chi tiết "chờ nhận" cần được tổ gá quét nhận; chi tiết "chờ cắt" chưa được cắt.') + '</div>') +
+      '<p><button class="btn o full" onclick="go(\'toHop\')">← Danh sách cấu kiện</button></p>';
+    V(h);
+  }).catch(fail);
+}
+function doToHop(da, ck) {
+  call('toHop', { maDA: da, cauKien: ck }).then(function (r) { toast('Đã tạo cấu kiện ' + r.uid); previewTags([r.uid]); }).catch(fail);
+}
+
+/* ================= in tem ================= */
+function viewInTem() {
+  V('<h2>In tem theo danh sách</h2><div class="card"><div class="row"><div><label>Loại</label><select id="pL"><option value="CT">Chi tiết</option><option value="CK">Cấu kiện</option><option value="VT">Vật tư</option></select></div>' +
+    '<div><label>Trạng thái</label><select id="pS"><option value="">Tất cả</option><option value="CHO_NHAN">Chờ nhận</option><option value="DANG_LAM">Đang làm</option><option value="TRONG_KHO">Vật tư trong kho</option></select></div></div>' +
+    '<label>Dự án</label>' + projectSelect('pD', true) + '<label>Tìm</label><input id="pQ" placeholder="Mã, cấu kiện, số chi tiết">' +
+    '<div style="margin-top:12px"><button class="btn full o" onclick="loadPrintList()">Lọc danh sách</button></div></div><div id="pList"></div>');
+  loadPrintList();
+}
+function loadPrintList() {
+  call('list', { loai: $('pL').value, trangThai: $('pS').value, maDA: $('pD').value, q: $('pQ').value }).then(function (rows) {
+    var key = $('pL').value === 'VT' ? 'MaVT' : 'UID';
+    $('pList').innerHTML = '<div class="card"><div class="row" style="align-items:center"><b>' + rows.length + ' mã</b><button class="btn o" style="flex:0 0 auto" onclick="document.querySelectorAll(\'.pc\').forEach(function(c){c.checked=true})">Chọn hết</button></div><ul class="list">' +
+      rows.map(function (x) { return '<li><input type="checkbox" class="pc" value="' + esc(x[key]) + '" style="width:22px;height:22px;flex:0 0 auto"><div class="m"><b>' + esc(x[key]) + '</b><span>' + esc(key === 'MaVT' ? x.MacThep + ' · ' + x.QuyCach + ' · số lò ' + x.HeatNo : (x.CauKien + ' · ' + (x.SoCT || '') + ' · ' + stText(x))) + '</span></div></li>'; }).join('') +
+      '</ul><button class="btn full" style="margin-top:10px" onclick="previewTags([].map.call(document.querySelectorAll(\'.pc:checked\'),function(c){return c.value}))">Xem trước & in</button></div>';
+  }).catch(fail);
+}
+var PRINT = { codes: [], reprint: false, fmt: 'NHAN' };
+var FMTS = {
+  NHAN: ['Máy in nhãn 100 × 70 mm', '@page { size: 100mm 70mm; margin: 0; }'],
+  A4: ['Giấy decal A4 – 8 tem 100 × 70 mm / trang', '@page { size: A4; margin: 6mm 5mm; }'],
+  NHO: ['Máy in nhãn 50 × 30 mm (mã QR nhỏ)', '@page { size: 50mm 30mm; margin: 0; }'],
+  A4N: ['Giấy decal A4 – 21 nhãn 63,5 × 38,1 mm / trang', '@page { size: A4; margin: 15mm 7mm 0 7mm; }']
+};
+function previewTags(codes, reprint) {
+  if (!codes.length) return toast('Chưa chọn mã nào', true);
+  call('tags', { codes: codes }).then(function (r) { showPreview(r, reprint); }).catch(fail);
+}
+function showPreview(r, reprint) {
+  var qrOnly = r.tags.every(function (t) { return t.kind === 'QR' || t.kind === 'FREE'; });
+  var fmt = store(qrOnly ? 'fmtQR' : 'fmt') || (qrOnly ? 'A4N' : 'NHAN');
+  if (!qrOnly && (fmt === 'NHO' || fmt === 'A4N')) fmt = 'NHAN';
+  PRINT = { reprint: !!reprint, fmt: fmt, data: r, qrOnly: qrOnly };
+  var opts = (qrOnly ? ['A4N', 'NHO', 'NHAN', 'A4'] : ['NHAN', 'A4']).map(function (k) { return '<option value="' + k + '"' + (fmt === k ? ' selected' : '') + '>' + FMTS[k][0] + '</option>'; }).join('');
+  V('<h2>' + (qrOnly ? 'Mã QR' : 'Tem') + ' (' + r.tags.length + ')</h2><div class="card"><label>Khổ in</label><select id="fmt" onchange="PRINT.fmt=this.value;store(PRINT.qrOnly?\'fmtQR\':\'fmt\',this.value);renderPrint()">' + opts + '</select>' +
+    '<div class="row" style="margin-top:12px"><button class="btn" onclick="doPrint()">⎙ In</button><button class="btn o" onclick="go(\'home\')">Xong</button></div>' +
+    (qrOnly ? '<p class="small muted">Muốn lưu ảnh mã QR: nhấn giữ vào ảnh bên dưới và chọn Lưu ảnh (điện thoại) hoặc chuột phải › Lưu hình ảnh (máy tính).</p>'
+      : '<p class="small muted">Dán tem trên mặt phẳng, xa mép vát và đường hàn, không dán ở mặt tiếp giáp khi gá. Ghi thêm mã duy nhất bằng bút sơn cạnh tem.</p>') +
+    '</div><div class="preview" id="pv"></div>' + (qrOnly ? '<h3>Ảnh mã QR</h3><div class="card"><div class="qimgs" id="qimgs"></div></div>' : ''));
+  renderPrint();
+  if (qrOnly) $('qimgs').innerHTML = r.tags.map(function (t) {
+    var d = t.d, src = qrImg(t.kind === 'QR' ? qrUrl(d.MaQR) : d.NoiDung);
+    return '<figure>' + (src ? '<img src="' + src + '" alt="' + esc(d.Nhan) + '">' : '<div class="muted small">Chưa tải được thư viện QR</div>') + '<figcaption>' + esc(d.Nhan || d.NoiDung) + (t.kind === 'QR' ? '<br><b>' + esc(d.MaQR) + '</b>' : '') + '</figcaption></figure>';
+  }).join('');
+}
+function renderPrint() {
+  var cfg = PRINT.data.config, f = PRINT.fmt, small = f === 'NHO' || f === 'A4N';
+  var html = PRINT.data.tags.map(function (t) { return small ? tagSmall(t, f === 'NHO' ? 50 : 63.5, f === 'NHO' ? 30 : 38.1) : tagHtml(t, cfg); }).join('');
+  $('pagesize').textContent = FMTS[f][1];
+  $('printArea').innerHTML = f === 'A4' ? '<div class="sheetA4">' + html + '</div>' : f === 'A4N' ? '<div class="sheetA4N">' + html + '</div>' : '<div class="single">' + html + '</div>';
+  if ($('pv')) $('pv').innerHTML = html;
+}
+function doPrint() { try { window.print(); } catch (e) { toast('Trình duyệt không cho in từ khung này. Mở ứng dụng ở tab riêng để in.', true); } }
+function row(k, v) { return '<tr><td class="k">' + k + '</td><td class="v">' + esc(v) + '</td></tr>'; }
+function L(vi, en) { return (S.cfg && S.cfg.TemSongNgu === 'KHONG') || !en ? vi : vi + ' / ' + en; }
+function tagHtml(t, cfg) {
+  var d = t.d, vn = cfg.TenNhaMay || 'NHÀ MÁY HẢI DƯƠNG', en = cfg.TenNhaMayEN || 'HAI DUONG FACTORY', code, title, rows, qrText, foot = '';
+  if (t.kind === 'VT') {
+    code = d.MaVT; title = d.Loai === 'THEP_DU' ? L('TEM THÉP DƯ', 'REMNANT TAG') : L('TEM VẬT TƯ', 'MATERIAL TAG');
+    rows = row(L('Mác thép', 'Material'), d.MacThep) + row(L('Quy cách', 'Size'), d.QuyCach) + row(L('Số lò', 'Heat No.'), d.HeatNo) + row(L('CO/CQ', 'MTR No.'), d.SoCOCQ || '…') +
+      row(L('Vị trí', 'Location'), d.ViTri) + row(L('Ngày nhập', 'Received'), (d.NgayNhap || '').slice(0, 10)) +
+      row(d.MaVTMe ? L('Tấm mẹ', 'Parent') : L('Loại', 'Type'), d.MaVTMe || ({ TAM: L('Thép tấm', 'Plate'), HINH: L('Thép hình', 'Section'), LO: L('Lô vật tư', 'Batch') }[d.Loai] || d.Loai)) +
+      row(L('Dự án', 'Project'), d.MaDA || L('Kho chung', 'Stock'));
+  } else if (t.kind === 'CK') {
+    code = d.UID; title = L('TEM CẤU KIỆN', 'ASSEMBLY TAG');
+    rows = row(L('Dự án', 'Project'), d.MaDA) + row(L('Cấu kiện', 'Assembly'), d.CauKien + ' #' + d.STT) + row(L('Bản vẽ', 'Drawing'), d.BanVe + ' · Rev ' + d.Rev) + row(L('Mác thép', 'Material'), d.MacThep) +
+      row(L('Khối lượng', 'Weight'), d.KhoiLuong + ' kg') + row(L('Ngày tổ hợp', 'Fit-up date'), (d.NgayTao || '').slice(0, 10)) + row(L('Công đoạn tiếp', 'Next'), L('Hàn', 'Welding')) + row(L('Tổ tổ hợp', 'Fit-up team'), d.ToNhan || '…');
+    foot = L('Chịu lực', 'Structural');
+  } else if (t.kind === 'QR' || t.kind === 'FREE') {
+    code = t.kind === 'QR' ? d.MaQR : (d.Nhan || '').slice(0, 30); title = L('MÃ QR', 'QR CODE') + (t.kind === 'QR' ? ' · ' + ((S.qrTypes || {})[d.Loai] || '').toUpperCase() : '');
+    rows = row('Nhãn', d.Nhan) + row('Nội dung', d.NoiDung || '—') + (t.kind === 'QR' ? row('Nhóm', (S.qrTypes || {})[d.Loai] || d.Loai) + row('Ngày tạo', (d.NgayTao || '').slice(0, 10)) + row('Người tạo', d.NguoiTao) : '');
+    qrText = t.kind === 'QR' ? qrUrl(d.MaQR) : d.NoiDung;
+  } else {
+    code = d.UID; title = L('TEM CHI TIẾT', 'PART TAG');
+    rows = row(L('Dự án', 'Project'), d.MaDA) + row(L('Cấu kiện', 'Assembly'), d.CauKien) + row(L('Bản vẽ', 'Drawing'), d.BanVe + ' · Rev ' + d.Rev) + row(L('Chi tiết', 'Part No.'), d.SoCT) +
+      row(L('Mác thép', 'Material'), d.MacThep) + row(L('Kích thước (mm)', 'Size'), d.KichThuoc) + row(L('Số lò', 'Heat No.'), d.HeatNo || '—') + row(L('Công đoạn tiếp', 'Next'), L('Tổ hợp', 'Fit-up'));
+    foot = d.ChiuLuc === 'K' ? 'Không chịu lực' : L('Chịu lực', 'Structural');
+  }
+  return '<div class="tag"><div class="th"><span>LILAMA 10 · ' + esc(vn) + (S.cfg && S.cfg.TemSongNgu === 'KHONG' ? '' : ' / ' + esc(en)) + '</span><b>' + esc(title) + '</b></div>' +
+    '<div class="tb"><table>' + rows + '</table><div class="tq">' + qrSvg(qrText || qrUrl(code)) + '<div>' + L('Quét', 'Scan') + '</div></div></div>' +
+    '<div class="tf"><span>' + esc(code) + '</span><small>' + esc(foot) + '</small></div>' +
+    (PRINT.reprint ? '<div class="rp">' + L('BẢN IN LẠI', 'REPRINT') + '</div>' : '') + '</div>';
+}
+/** Tem nhỏ chỉ dùng cho mã QR (khổ 50 × 30 mm hoặc 63,5 × 38,1 mm) */
+function tagSmall(t, w, h) {
+  var d = t.d, isQR = t.kind === 'QR', text = isQR ? qrUrl(d.MaQR) : d.NoiDung, q = h - 4;
+  return '<div class="tag sm" style="width:' + w + 'mm;height:' + h + 'mm"><div class="sq" style="width:' + q + 'mm;height:' + q + 'mm">' + qrSvg(text) + '</div>' +
+    '<div class="sx"><b>' + esc(d.Nhan || d.NoiDung) + '</b>' + (d.NoiDung && d.Nhan !== d.NoiDung && !/^https?:/i.test(d.NoiDung) ? '<span>' + esc(d.NoiDung) + '</span>' : '') +
+    '<i>' + esc(isQR ? d.MaQR : 'LILAMA 10') + '</i></div></div>';
+}
+function qrImg(text) {
+  if (!window.qrcode) return '';
+  var q = qrcode(0, 'M'); q.addData(text); q.make();
+  return q.createDataURL(8, 4);
+}
+
+/* ================= tổng quan ================= */
+function viewDash() {
+  V('<h2>Tổng quan sản xuất</h2>' + projectSelect('dDA', true) + '<div id="dash" style="margin-top:12px"></div>');
+  $('dDA').onchange = function () { if (this.value) { S.maDA = this.value; store('maDA', S.maDA); } loadDash(); };
+  loadDash();
+}
+function loadDash() {
+  call('dashboard', { maDA: $('dDA').value }).then(function (d) {
+    var k = d.kpi, T = d.tong;
+    var maxT = Math.max.apply(null, d.byStage.map(function (s) { return s.choNhan + s.dangLam + s.ncr; }).concat([1]));
+    var h = '<div class="kpis">' +
+      kpiBox(k.khongTreo + '%', 'mã đang sản xuất không bị treo quá ' + d.hanNhanGio + ' giờ (mục tiêu ≥ 90%)', k.khongTreo >= 90) +
+      kpiBox(k.truyXuatHeat + '%', 'chi tiết chịu lực đã cắt có heat number (mục tiêu 100%)', k.truyXuatHeat >= 100) +
+      kpiBox(k.banGiaoXacNhan + '%', 'lượt giao đã được bên nhận quét xác nhận (mục tiêu ≥ 95%)', k.banGiaoXacNhan >= 95) +
+      kpiBox(k.ncrMo, 'NCR đang mở', k.ncrMo === 0) + '</div>' +
+      '<div class="card" style="margin-top:12px"><dl class="kv"><dt>Chi tiết đã cắt</dt><dd>' + T.daCat + ' / ' + T.chiTiet + '</dd><dt>Cấu kiện đã tổ hợp</dt><dd>' + T.cauKien + '</dd><dt>Cấu kiện đã xuất</dt><dd>' + T.daXuat + ' (' + T.tanXuat + ' tấn)</dd><dt>Tổng khối lượng chi tiết</dt><dd>' + T.tanTong + ' tấn</dd><dt>Số lần in lại tem</dt><dd>' + k.inLai + ' (' + k.tyLeInLai + '%)</dd></dl></div>' +
+      '<h3>Đang ở từng công đoạn</h3><div class="card">' + d.byStage.map(function (s) {
+        var tot = s.choNhan + s.dangLam + s.ncr;
+        return '<div style="margin:8px 0"><div class="row small" style="justify-content:space-between"><b style="flex:1">' + esc(s.ten) + '</b><span style="flex:0 0 auto" class="muted">' + tot + ' · ' + s.tan + ' t</span></div>' +
+          '<div class="bar" style="width:' + Math.max(4, 100 * tot / maxT) + '%"><i style="width:' + (tot ? 100 * s.dangLam / tot : 0) + '%;background:var(--blue)"></i><i style="width:' + (tot ? 100 * s.choNhan / tot : 0) + '%;background:var(--amber)"></i><i style="width:' + (tot ? 100 * s.ncr / tot : 0) + '%;background:var(--red)"></i></div></div>';
+      }).join('') + '<div class="small muted"><span style="color:var(--blue)">■</span> đang làm &nbsp; <span style="color:var(--amber)">■</span> chờ nhận / chờ cắt &nbsp; <span style="color:var(--red)">■</span> NCR</div></div>';
+    h += '<h3>Treo quá ' + d.hanNhanGio + ' giờ chưa nhận (' + d.treo.length + ')</h3><div class="card">' + (d.treo.length ? '<ul class="list">' + d.treo.map(function (x) { return '<li onclick="openItem(\'' + esc(x.UID) + '\')"><div class="m"><b>' + esc(x.UID) + '</b><span>' + esc(stageName(x.TuCongDoan) + ' → ' + stageName(x.CongDoan) + ' · giao ' + x.CapNhat) + '</span></div><span class="chip r">' + x.gio + ' giờ</span></li>'; }).join('') + '</ul>' : '<span class="small muted">Không có.</span>') + '</div>';
+    h += '<h3>NCR đang mở (' + d.ncr.length + ')</h3><div class="card">' + (d.ncr.length ? '<ul class="list">' + d.ncr.map(function (n) { return '<li onclick="openItem(\'' + esc(n.UID) + '\')"><div class="m"><b>' + esc(n.SoNCR) + ' · ' + esc(n.UID) + '</b><span>' + esc(n.MoTa) + '</span></div></li>'; }).join('') + '</ul>' : '<span class="small muted">Không có.</span>') + '</div>';
+    h += '<h3>Cảnh báo bản vẽ đổi Rev (' + d.canhBao.length + ')</h3><div class="card">' + (d.canhBao.length ? '<ul class="list">' + d.canhBao.slice(0, 50).map(function (x) { return '<li onclick="openItem(\'' + esc(x.UID) + '\')"><div class="m"><b>' + esc(x.UID) + '</b><span>' + esc(x.CanhBao) + '</span></div></li>'; }).join('') + '</ul>' : '<span class="small muted">Không có.</span>') + '</div>';
+    if (d.cauKien.length) h += '<h3>Kiểm đủ bộ theo cấu kiện</h3><div class="card"><table class="t"><tr><th>Cấu kiện</th><th>Đã tổ hợp</th><th>Bộ tiếp theo</th></tr>' + d.cauKien.map(function (c) { return '<tr><td>' + esc(c.CauKien) + '</td><td>' + c.daToHop + ' / ' + c.SL + '</td><td>' + (c.conLai <= 0 ? '<span class="chip g">Xong</span>' : c.du ? '<span class="chip g">Đủ bộ</span>' : '<span class="chip a">Thiếu</span>') + '</td></tr>'; }).join('') + '</table></div>';
+    h += '<p class="small muted">Số liệu lúc ' + esc(d.now) + '</p>';
+    $('dash').innerHTML = h;
+  }).catch(fail);
+}
+function kpiBox(v, l, good) { return '<div class="kpi" style="background:' + (good ? 'linear-gradient(135deg,#178a52,#1fa463)' : 'linear-gradient(135deg,#c2372e,#f07a3c)') + '"><b>' + esc(v) + '</b><span>' + esc(l) + '</span></div>'; }
+
+/* ================= truy xuất ================= */
+function viewTrace(code) {
+  V('<h2>Truy xuất nguồn gốc</h2><div class="card"><button class="big" onclick="scan(function(c){go(\'trace\',c)})">▣&nbsp; QUÉT CẤU KIỆN / CHI TIẾT</button><div class="row" style="margin-top:10px"><input id="tq" placeholder="Hoặc nhập mã" value="' + esc(code || '') + '" autocapitalize="characters"><button class="btn o" style="flex:0 0 auto" onclick="go(\'trace\',$(\'tq\').value)">Xem</button></div></div><div id="tr" class="report"></div>');
+  if (!code) return;
+  call('trace', { code: code }).then(function (r) {
+    if (r.kind === 'VT') { viewPlate(r); return; }
+    if (r.kind === 'QR') { viewQRRecord(r); return; }
+    var it = r.item;
+    var h = '<div class="card"><div class="row" style="align-items:center"><div><b style="font-size:18px">BÁO CÁO TRUY XUẤT NGUỒN GỐC</b><div class="small muted">LILAMA 10 · ' + esc(S.cfg.TenNhaMay) + ' · lập lúc ' + esc(r.generated) + '</div></div><button class="btn o" style="flex:0 0 auto" onclick="printReport()">⎙ In</button></div>' +
+      '<dl class="kv" style="margin-top:10px"><dt>Mã</dt><dd>' + esc(it.UID) + '</dd><dt>Dự án</dt><dd>' + esc(it.MaDA) + '</dd><dt>Cấu kiện</dt><dd>' + esc(it.CauKien) + '</dd><dt>Bản vẽ</dt><dd>' + esc(it.BanVe + ' Rev ' + it.Rev) + '</dd><dt>Khối lượng</dt><dd>' + esc(it.KhoiLuong) + ' kg</dd><dt>Trạng thái</dt><dd>' + esc(stText(it)) + '</dd>' + (r.parent ? '<dt>Thuộc cấu kiện</dt><dd>' + esc(r.parent.UID) + '</dd>' : '') + '</dl>' +
+      (r.thieuHeat ? '<div class="alert r">' + r.thieuHeat + ' chi tiết chịu lực chưa có heat number.</div>' : '<div class="alert b">Toàn bộ chi tiết chịu lực đã có heat number.</div>') + '</div>' +
+      '<h3>Vật liệu từng chi tiết</h3><div class="card" style="overflow:auto"><table class="t"><tr><th>Mã chi tiết</th><th>Chi tiết</th><th>Mác thép</th><th>Số lò</th><th>Tấm</th><th>CO/CQ</th></tr>' +
+      r.rows.map(function (x) { return '<tr><td>' + esc(x.UID) + '</td><td>' + esc(x.SoCT) + '<br><span class="small muted">' + esc(x.KichThuoc) + '</span></td><td>' + esc(x.MacThep) + '</td><td><b>' + esc(x.HeatNo || '—') + '</b></td><td>' + esc(x.MaVT) + '</td><td>' + esc(x.SoCOCQ) + '</td></tr>'; }).join('') + '</table></div>' +
+      (r.ncr.length ? '<h3>NCR</h3><div class="card"><table class="t"><tr><th>Số</th><th>Mô tả</th><th>Xử lý</th></tr>' + r.ncr.map(function (n) { return '<tr><td>' + esc(n.SoNCR) + '</td><td>' + esc(n.MoTa) + '</td><td>' + esc(n.TrangThai === 'MO' ? 'Đang mở' : n.HuongXuLy + ' · ' + n.NgayDong) + '</td></tr>'; }).join('') + '</table></div>' : '') +
+      '<h3>Nhật ký sản xuất</h3><div class="card" style="overflow:auto"><table class="t"><tr><th>Thời gian</th><th>Mã</th><th>Thao tác</th><th>Người</th><th>Ghi chú</th></tr>' +
+      r.logs.map(function (l) { return '<tr><td>' + esc(l.ThoiGian) + '</td><td>' + esc(l.UID.split('-').slice(-2).join('-')) + '</td><td>' + esc(S.acts[l.HanhDong] || l.HanhDong) + '</td><td>' + esc(l.HoTen) + '</td><td>' + esc(l.GhiChu) + '</td></tr>'; }).join('') + '</table></div>';
+    $('tr').innerHTML = h;
+  }).catch(fail);
+}
+function printReport() {
+  $('pagesize').textContent = '@page { size: A4; margin: 12mm; }';
+  $('printArea').innerHTML = '<div class="report">' + $('tr').innerHTML.replace(/<button[^>]*>.*?<\/button>/g, '') + '</div>';
+  doPrint();
+}
+
+/* ================= nạp BOM ================= */
+function viewBOM() {
+  V('<h2>Nạp BOM từ Excel</h2><div class="card">' +
+    '<div class="row"><div><label>Mã dự án * (viết liền)</label><input id="b1" placeholder="CL01" autocapitalize="characters" value="' + esc(S.maDA || '') + '"></div><div><label>Khách hàng</label><input id="b3"></div></div>' +
+    '<label>Tên dự án</label><input id="b2">' +
+    '<label>Dán các dòng BOM (copy từ Excel, 11 cột theo mẫu)</label><textarea id="b4" style="min-height:180px;font-family:monospace;font-size:13px" placeholder="Bản vẽ | Rev | Cấu kiện | SL cấu kiện | Số CT | SL/CK | Mác thép | Dày | Kích thước | KL 1 chiếc (kg) | Chịu lực C/K"></textarea>' +
+    '<div class="alert b small">Thứ tự 11 cột: <b>Bản vẽ · Rev · Cấu kiện · SL cấu kiện · Số chi tiết · SL trên 1 cấu kiện · Mác thép · Dày (mm) · Kích thước · KL 1 chiếc (kg) · Chịu lực (C/K)</b>. Nạp lại bản vẽ với Rev mới: chi tiết chưa cắt được cập nhật, chi tiết đã cắt được cảnh báo để kiểm tra.</div>' +
+    '<button class="btn full" onclick="doBOM()">Nạp BOM</button></div><div id="bRes"></div>');
+}
+function doBOM() {
+  call('importBOM', { maDA: $('b1').value, tenDA: $('b2').value, khachHang: $('b3').value, text: $('b4').value }).then(function (r) {
+    $('bRes').innerHTML = '<div class="card"><b>Đã nạp dự án ' + esc(r.maDA) + '</b><dl class="kv" style="margin-top:8px"><dt>Dòng BOM</dt><dd>' + r.dong + '</dd><dt>Chi tiết tạo mới</dt><dd>' + r.taoMoi + '</dd><dt>Chi tiết cập nhật</dt><dd>' + r.capNhat + '</dd><dt>Cảnh báo</dt><dd>' + r.canhBao + '</dd>' + (r.doiRev.length ? '<dt>Đổi Rev</dt><dd>' + esc(r.doiRev.join('; ')) + '</dd>' : '') + '</dl></div>';
+    S.maDA = r.maDA; store('maDA', S.maDA);
+    return call('projects', {}, true).then(function (p) { S.projects = p; });
+  }).catch(fail);
+}
+
+/* ================= tạo mã QR ================= */
+function canManagedQR() { return isRole(['QUAN_LY', 'KY_THUAT', 'KHO', 'QC']); }
+function viewQR() {
+  var types = Object.keys(S.qrTypes || {}).map(function (k) { return '<option value="' + k + '">' + esc(S.qrTypes[k]) + '</option>'; }).join('');
+  V('<h2>Tạo mã QR</h2><div class="card">' +
+    '<label>Kiểu mã</label><select id="qM">' + (canManagedQR() ? '<option value="QL">Mã quản lý – lưu vào hệ thống, quét ra thông tin</option>' : '') + '<option value="TD">Nội dung tự do – mã hóa đúng chữ hoặc đường link nhập vào</option></select>' +
+    '<div id="qLB"><label>Nhóm</label><select id="qL">' + types + '</select></div>' +
+    '<label id="qH"></label><textarea id="qT"></textarea>' +
+    '<div id="qGB"><label>Ghi chú chung (không bắt buộc)</label><input id="qG"></div>' +
+    '<div style="margin-top:14px"><button class="btn full" onclick="doQR()">Tạo mã QR</button></div></div>' +
+    (canManagedQR() ? '<h3>Mã quản lý đã tạo</h3><div class="card"><div class="row"><input id="qS" placeholder="Tìm theo mã, nhãn, nội dung"><button class="btn o" style="flex:0 0 auto" onclick="loadQR()">Tìm</button></div><div id="qList" style="margin-top:8px"></div></div>' : ''));
+  function mode() {
+    var ql = $('qM').value === 'QL';
+    $('qLB').style.display = ql ? '' : 'none'; $('qGB').style.display = ql ? '' : 'none';
+    $('qH').textContent = ql ? 'Mỗi dòng một mã: Nhãn | Nội dung hoặc đường link (phần sau dấu | không bắt buộc)' : 'Mỗi dòng một mã: nội dung hoặc đường link. Muốn in kèm tên thì ghi: Tên | nội dung';
+    $('qT').placeholder = ql ? 'Bãi A-01 | Thép tấm dày 16–25 mm\nMáy cắt CNC số 1 | Xưởng 1\nBản vẽ SD-201 Rev B | https://drive.google.com/…' : 'https://drive.google.com/…\nWi-Fi xưởng | WIFI:T:WPA;S:Xuong1;P:matkhau;;';
+  }
+  $('qM').onchange = mode; mode();
+  if (canManagedQR()) { $('qS').addEventListener('keydown', function (e) { if (e.key === 'Enter') loadQR(); }); loadQR(); }
+}
+function loadQR() {
+  call('listQR', { q: $('qS').value }, true).then(function (rows) {
+    if (!$('qList')) return;
+    $('qList').innerHTML = rows.length ? '<ul class="list">' + rows.slice(0, 80).map(function (x) {
+      return '<li><input type="checkbox" class="qc" value="' + esc(x.MaQR) + '" style="width:22px;height:22px;flex:0 0 auto"><div class="m" onclick="openItem(\'' + esc(x.MaQR) + '\')"><b>' + esc(x.Nhan) + '</b><span>' + esc(x.MaQR + ' · ' + (S.qrTypes[x.Loai] || x.Loai) + (x.NoiDung ? ' · ' + x.NoiDung : '')) + '</span></div></li>';
+    }).join('') + '</ul><button class="btn o full" style="margin-top:10px" onclick="previewTags([].map.call(document.querySelectorAll(\'.qc:checked\'),function(c){return c.value}))">In lại các mã đã chọn</button>' : '<span class="small muted">Chưa có mã nào.</span>';
+  }).catch(fail);
+}
+function doQR() {
+  var text = $('qT').value.trim();
+  if (!text) return toast('Chưa nhập nội dung', true);
+  if ($('qM').value === 'QL') {
+    call('taoQR', { loai: $('qL').value, text: text, ghiChu: $('qG').value }).then(function (r) {
+      toast('Đã tạo ' + r.length + ' mã QR'); previewTags(r.map(function (x) { return x.MaQR; }));
+    }).catch(fail);
+  } else {
+    var lines = text.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean);
+    if (lines.length > 200) return toast('Mỗi lần tạo tối đa 200 mã', true);
+    var tags = lines.map(function (l) {
+      var i = l.indexOf('|'), nhan = i > 0 ? l.slice(0, i).trim() : l, nd = i > 0 ? l.slice(i + 1).trim() : l;
+      if (nd.length > 1200) nd = nd.slice(0, 1200);
+      return { kind: 'FREE', d: { Nhan: nhan, NoiDung: nd } };
+    });
+    showPreview({ tags: tags, config: S.cfg });
+  }
+}
+function viewQRRecord(g) {
+  var q = g.qr, isUrl = /^https?:\/\//i.test(q.NoiDung || '');
+  V('<div class="status" style="background:var(--navy)"><div class="small">MÃ QR · ' + esc((S.qrTypes[q.Loai] || q.Loai).toUpperCase()) + '</div><div class="uid">' + esc(q.Nhan) + '</div><div class="st">' + esc(q.MaQR) + '</div></div>' +
+    '<div class="card"><dl class="kv"><dt>Nhãn</dt><dd>' + esc(q.Nhan) + '</dd><dt>Nội dung</dt><dd>' + (isUrl ? '<a href="' + esc(q.NoiDung) + '" target="_blank" rel="noopener">' + esc(q.NoiDung) + '</a>' : esc(q.NoiDung || '—')) + '</dd>' +
+    '<dt>Nhóm</dt><dd>' + esc(S.qrTypes[q.Loai] || q.Loai) + '</dd>' + (q.GhiChu ? '<dt>Ghi chú</dt><dd>' + esc(q.GhiChu) + '</dd>' : '') + '<dt>Người tạo</dt><dd>' + esc(q.NguoiTao) + '</dd><dt>Ngày tạo</dt><dd>' + esc(q.NgayTao) + '</dd></dl></div>' +
+    '<div class="actions">' + (isUrl ? '<a class="btn g full" style="text-decoration:none" href="' + esc(q.NoiDung) + '" target="_blank" rel="noopener">Mở đường link</a>' : '') +
+    '<button class="btn o full" onclick="previewTags([\'' + esc(q.MaQR) + '\'])">⎙ Xem / in lại mã</button><button class="btn o full" onclick="scan(openItem)">Quét mã khác</button></div>');
+}
+
+/* ================= khởi động ================= */
+(function start() {
+  var c = store('cred');
+  if (c && c.maNV) { S.cred = c; doLogin(c.maNV, c.pin); } else viewLogin();
+})();
+</script>
+</body>
+</html>
